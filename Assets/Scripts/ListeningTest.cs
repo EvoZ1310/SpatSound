@@ -25,6 +25,7 @@ public class ListeningTest : MonoBehaviour
     private float _currentAudioSourceStartedTime;
     private int _listeningId;
     private bool _isRunning;
+    private bool _isWarmup;
 
     // Start is called before the first frame update
     void Start()
@@ -47,14 +48,39 @@ public class ListeningTest : MonoBehaviour
         _isRunning = true;
     }
 
+    public void StartWarmup()
+    {
+        GazeCursor.gameObject.SetActive(true);
+        _listeningId = 0;
+        _audioSources = ShuffleArray(AudioSources.GetComponentsInChildren<AudioSource>(true).ToArray());
+        _currentAudioSource = _audioSources[_listeningId];
+        _currentAudioSource.gameObject.SetActive(true);
+        _isWarmup = true;
+        _isRunning = true;
+    }
+
+    public void EndWarmup()
+    {
+        _isWarmup = false;
+        _isRunning = false;
+
+        if(_currentMarker != null)
+        {
+            _currentMarker.gameObject.SetActive(false);
+            _currentMarker = null;
+        }
+
+        _currentAudioSource.gameObject.SetActive(false);
+
+        _listeningId = 0;
+        GazeCursor.gameObject.SetActive(false);
+    }
+
     private void EndListeningTest()
     {
         _isRunning = false;
         ListeningTestFinished.Invoke();
 
-        _currentMarker.gameObject.SetActive(false);
-        _currentAudioSource.gameObject.SetActive(false);
-        _currentMarker = null;
         foreach (var listeningTestMarker in _markers)
         {
             Destroy(listeningTestMarker.gameObject);
@@ -63,16 +89,6 @@ public class ListeningTest : MonoBehaviour
         _markers.Clear();
         _listeningId = 0;
         GazeCursor.gameObject.SetActive(false);
-    }
-
-    private void OnEnable()
-    {
-
-    }
-
-    private void OnDisable()
-    {
-
     }
 
     // Update is called once per frame
@@ -110,20 +126,30 @@ public class ListeningTest : MonoBehaviour
     {
         _listeningId++;
 
-        if (_listeningId >= _audioSources.Length)
+        if (!_isWarmup)
         {
-            EndListeningTest();
-            return;
+            var time = Time.realtimeSinceStartup - _currentAudioSourceStartedTime;
+            _listeningTestData.AddDataPair(new ListeningTestDataPair(_currentAudioSource.name, time, _currentAudioSource.transform.position, _currentMarker.transform.position));
+            _markers.Add(_currentMarker);
+            _currentAudioSourceStartedTime = Time.realtimeSinceStartup;
         }
 
-        var time = Time.realtimeSinceStartup - _currentAudioSourceStartedTime;
-        _listeningTestData.AddDataPair(new ListeningTestDataPair(_currentAudioSource.name, time, _currentAudioSource.transform.position, _currentMarker.transform.position));
-        _markers.Add(_currentMarker);
         _currentMarker.gameObject.SetActive(false);
         _currentMarker = null;
-
         _currentAudioSource.gameObject.SetActive(false);
-        _currentAudioSourceStartedTime = Time.realtimeSinceStartup;
+
+        if (_listeningId >= _audioSources.Length)
+        {
+            if(_isWarmup)
+            {
+                _listeningId = 0;
+            }
+            else
+            {
+                EndListeningTest();
+                return;
+            }
+        }
 
         _currentAudioSource = _audioSources[_listeningId];
         _currentAudioSource.gameObject.SetActive(true);
