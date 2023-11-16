@@ -129,7 +129,7 @@ public class ListeningTest : MonoBehaviour
         if (!_isWarmup)
         {
             var time = Time.realtimeSinceStartup - _currentAudioSourceStartedTime;
-            _listeningTestData.AddDataPair(new ListeningTestDataPair(_currentAudioSource.name, time, _currentAudioSource.transform.position, _currentMarker.transform.position));
+            _listeningTestData.AddDataPair(new ListeningTestDataPair(_currentAudioSource.GetComponent<SampleIdentifier>().Name, time, _currentAudioSource.transform.position, _currentMarker.transform.position));
             _markers.Add(_currentMarker);
             _currentAudioSourceStartedTime = Time.realtimeSinceStartup;
         }
