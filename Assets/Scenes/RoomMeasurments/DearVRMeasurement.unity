@@ -1121,7 +1121,7 @@ MonoBehaviour:
   useUnityDistance: 0
   auralization: 1
   roomPreset: 0
-  internalReverb: 1
+  internalReverb: 0
   performanceMode: 0
   dearVRPlayOnAwake: 0
   bypass: 0
