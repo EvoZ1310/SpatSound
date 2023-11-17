@@ -10,8 +10,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3350155489831868977, guid: 36c7e028fa1516347b26774e46d1c861, type: 3}
       propertyPath: m_Name
-      value: SoundSource
+      value: Meta_SoundSource
       objectReference: {fileID: 0}
+    - target: {fileID: 3350155489831868980, guid: 36c7e028fa1516347b26774e46d1c861, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: 004fe9b1126c2194b80e8e24dc9da48a, type: 2}
     - target: {fileID: 3350155489831868982, guid: 36c7e028fa1516347b26774e46d1c861, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -55,5 +59,49 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3350155489831868977, guid: 36c7e028fa1516347b26774e46d1c861, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8972524257670338327}
+    - targetCorrespondingSourceObject: {fileID: 3350155489831868977, guid: 36c7e028fa1516347b26774e46d1c861, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6787051721324562751}
   m_SourcePrefab: {fileID: 100100000, guid: 36c7e028fa1516347b26774e46d1c861, type: 3}
+--- !u!1 &4077850166808909294 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3350155489831868977, guid: 36c7e028fa1516347b26774e46d1c861, type: 3}
+  m_PrefabInstance: {fileID: 1650933974977564639}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8972524257670338327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4077850166808909294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a07f270ac36c49789466c75ceb88424c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableSpatialization: 1
+  gainBoostDb: 0
+  enableAcoustics: 1
+  reverbSendDb: 0
+--- !u!114 &6787051721324562751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4077850166808909294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 796f04c5a94947649c2235acef0008ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hrtfIntensity: 1
+  volumetricRadius: 0
+  earlyReflectionsSendDb: 0
+  directivityIntensity: 1
+  directivityPattern: 1

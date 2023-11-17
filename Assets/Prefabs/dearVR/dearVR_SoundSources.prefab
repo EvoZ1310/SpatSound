@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5008882011820399336}
   m_Layer: 0
-  m_Name: SoundSources
+  m_Name: dearVR_SoundSources
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -5,9 +5,18 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/MSAcousticsLT.unity
+    guid: 526f14e122a98354c94364a03228bbf7
+  - enabled: 0
+    path: Assets/Scenes/MetaLT.unity
+    guid: 5ec4897d369d7c841b8b17b023d3e2af
+  - enabled: 0
+    path: Assets/Scenes/dearVRLT.unity
+    guid: 615398d5999dd3048b496e09489c77c3
   - enabled: 1
-    path: Assets/Scenes/SpatializingSoundTemplate.unity
-    guid: c4f0f13453776c346b3437e5707d77dc
+    path: Assets/Scenes/SteamAudioLT.unity
+    guid: 6f572e42eaa018c4fb12be5b4f66e938
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 23ee986ba71f3814cb6c461a590228c4, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: b9585994c9109904b807a63f05c726b0, type: 2}
