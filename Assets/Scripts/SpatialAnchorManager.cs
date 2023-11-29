@@ -22,7 +22,7 @@ public class SpatialAnchorManager : MonoBehaviour
         }
 
         Instance = this;
-        //OVRManager.InputFocusAcquired += OVRManagerOnInputFocusAcquired;
+        OVRManager.InputFocusAcquired += OVRManagerOnInputFocusAcquired;
         OVRManager.HMDMounted += OVRManagerOnHMDMounted;
     }
 
@@ -181,13 +181,38 @@ public class SpatialAnchorManager : MonoBehaviour
         LoadAnchor();
     }
 
+    //private bool _userPresent = true;
+    private void Update()
+    {    
+        //if (_userPresent && !OVRPlugin.userPresent)
+        //{
+        //    _userPresent = false;
+        //    Log("User Present false");
+        //}
+
+        //if(!_userPresent && OVRPlugin.userPresent)
+        //{
+        //    _userPresent = true;
+        //    Log("User Present true");
+        //    LoadAnchor();
+        //}
+    }
+
     private void OVRManagerOnInputFocusAcquired()
     {
+        Log("InputFocusAcquired");
         LoadAnchor();
     }
 
     private void OVRManagerOnHMDMounted()
     {
+        Log("HMDMounted");
+        StartCoroutine(_LoadAnchor());
+    }
+
+    private IEnumerator _LoadAnchor()
+    {
+        yield return new WaitForSeconds(3f);
         LoadAnchor();
     }
 

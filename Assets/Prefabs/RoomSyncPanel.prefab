@@ -2337,6 +2337,7 @@ GameObject:
   - component: {fileID: 2015386809149037242}
   - component: {fileID: 1880099961221147002}
   - component: {fileID: 9189123812850920348}
+  - component: {fileID: 8737668153115559879}
   m_Layer: 0
   m_Name: RoomSyncPanel
   m_TagString: Untagged
@@ -2448,6 +2449,18 @@ MonoBehaviour:
   _selectSurface: {fileID: 0}
   _movementProvider: {fileID: 0}
   _tiebreakerScore: 0
+--- !u!114 &8737668153115559879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7412366687198872404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e36e234e676f14d90da57f503ed30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8041333140088281766
 GameObject:
   m_ObjectHideFlags: 0
