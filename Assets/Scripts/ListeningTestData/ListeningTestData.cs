@@ -8,6 +8,7 @@ public class ListeningTestData
 {
     public string Identifier;
     public List<ListeningTestDataPair> Results;
+    public int UserIdentifier;
 
     public ListeningTestData(string identifier)
     {
