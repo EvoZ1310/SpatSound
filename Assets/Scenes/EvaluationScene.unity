@@ -1094,12 +1094,7 @@ MonoBehaviour:
   MetaFolder: "Y:\\OneDrive FH Master\\OneDrive - Fachhochschule St. P\xF6lten\\MA\\H\xF6rtest\\MetaLT"
   QuestionnairPath: "Y:\\OneDrive FH Master\\OneDrive - Fachhochschule St. P\xF6lten\\MA\\H\xF6rtest\\Spatializing
     Sound.csv"
-  NewA01: {fileID: 1821316990}
-  NewA02: {fileID: 335247467}
-  OldA01: {fileID: 407014344}
-  OldA02: {fileID: 759062717}
-  NewCenter: {fileID: 1034655824}
-  NewCenter1: {fileID: 767809537}
+  OutputPath: "Y:\\OneDrive FH Master\\OneDrive - Fachhochschule St. P\xF6lten\\MA\\H\xF6rtest"
 --- !u!4 &397863107
 Transform:
   m_ObjectHideFlags: 0
@@ -1197,11 +1192,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 36c7e028fa1516347b26774e46d1c861, type: 3}
---- !u!4 &407014344 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3350155489831868982, guid: 36c7e028fa1516347b26774e46d1c861, type: 3}
-  m_PrefabInstance: {fileID: 407014343}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &432331993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1488,11 +1478,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 36c7e028fa1516347b26774e46d1c861, type: 3}
---- !u!4 &759062717 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3350155489831868982, guid: 36c7e028fa1516347b26774e46d1c861, type: 3}
-  m_PrefabInstance: {fileID: 759062716}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &767809533
 GameObject:
   m_ObjectHideFlags: 0
@@ -3306,37 +3291,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b14164f8f23faae4293baeb84485b3d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &2115084157
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2115084158}
-  m_Layer: 0
-  m_Name: 90Degrees
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2115084158
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2115084157}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1001 &2143324884
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4107,4 +4061,3 @@ SceneRoots:
   - {fileID: 1821316990}
   - {fileID: 759062716}
   - {fileID: 407014343}
-  - {fileID: 2115084158}

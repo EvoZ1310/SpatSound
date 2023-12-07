@@ -21,6 +21,7 @@ public class SPSSDataSet
     public float Localization_Accuracy;
     public float Voice_Naturalness;
     public float Location_Difficulty;
+    public float TimeNeededMean;
     public string Spatializer;
 }
 
@@ -68,6 +69,7 @@ public class TestDeserialization : MonoBehaviour
     public string MSAcousticFolder;
     public string MetaFolder;
     public string QuestionnairPath;
+    public string OutputPath;
 
     // Debugging
     //public Transform NewA01;
@@ -88,25 +90,42 @@ public class TestDeserialization : MonoBehaviour
         var qDataSet = GetQuestionairDataSet();
 
         var spssDataSetList = new List<SPSSDataSet>();
+        var spssPlottingDataSet = new List<SPSSPlottingDataSet>();
 
         foreach (var testEntry in dearVRTestData)
         {
             spssDataSetList.Add(CreateSPSSDataSet(testEntry, qDataSet, DataSetContstants.DEARVR_SPATIALIZER));
+            spssPlottingDataSet.AddRange(GenerateSPSSPlottingDataSet(testEntry, DataSetContstants.DEARVR_SPATIALIZER));
         }
 
         foreach (var testEntry in steamData)
         {
             spssDataSetList.Add(CreateSPSSDataSet(testEntry, qDataSet, DataSetContstants.STEAM_SPATIALIZER));
+            spssPlottingDataSet.AddRange(GenerateSPSSPlottingDataSet(testEntry, DataSetContstants.STEAM_SPATIALIZER));
         }
 
         foreach (var testEntry in msData)
         {
             spssDataSetList.Add(CreateSPSSDataSet(testEntry, qDataSet, DataSetContstants.MSACOUSTIC_SPATIALIZER));
+            spssPlottingDataSet.AddRange(GenerateSPSSPlottingDataSet(testEntry, DataSetContstants.MSACOUSTIC_SPATIALIZER));
         }
 
         foreach (var testEntry in metaData)
         {
             spssDataSetList.Add(CreateSPSSDataSet(testEntry, qDataSet, DataSetContstants.META_SPATIALIZER));
+            spssPlottingDataSet.AddRange(GenerateSPSSPlottingDataSet(testEntry, DataSetContstants.META_SPATIALIZER));
+        }
+
+        using (var spssDataFile = new StreamWriter(Path.Combine(OutputPath, "spssDataFile.csv")))
+        {
+            var csvText = CSV.Serialize(spssDataSetList, new CSVSettings { FieldDelimiter = ';' });
+            spssDataFile.Write(csvText);
+        }
+
+        using (var spssPlottingDataFile = new StreamWriter(Path.Combine(OutputPath, "spssPlottingDataFile.csv")))
+        {
+            var csvText = CSV.Serialize(spssPlottingDataSet, new CSVSettings { FieldDelimiter = ';' });
+            spssPlottingDataFile.Write(csvText);
         }
     }
 
@@ -156,6 +175,7 @@ public class TestDeserialization : MonoBehaviour
         float sumAzimuthDiff = 0;
         float sumShortAzimuthDiff = 0;
         float sumLongAzimuthDiff = 0;
+        float sumTimeNeeded = 0;
         int count = 0;
         int longCount = 0;
         int shortCount = 0;
@@ -184,6 +204,8 @@ public class TestDeserialization : MonoBehaviour
 
             sumDistanceDiff += distance.magnitude;
             sumAzimuthDiff += sumDistanceDiff;
+            sumTimeNeeded += result.TimeNeeded;
+
             count++;
         }
 
@@ -193,8 +215,55 @@ public class TestDeserialization : MonoBehaviour
         data.AzimuthMean = sumAzimuthDiff / count;
         data.ShortAzimuthMean = sumShortAzimuthDiff / shortCount;
         data.LongAzimuthMean = sumLongAzimuthDiff / longCount;
+        data.TimeNeededMean = sumTimeNeeded / count;
 
         return data;
+    }
+
+    private List<SPSSPlottingDataSet> GenerateSPSSPlottingDataSet(ListeningTestData testData, string spatializer)
+    {
+        var centerNew2d = GetCenterPointFromTestData(testData);
+        var centerNew = new Vector3(centerNew2d.x, 0, centerNew2d.y);
+        var pointToMove = new GameObject().transform;
+        var centerOld = Vector3.zero;
+        //var as02Old = OriginPoints.GetComponentsInChildren<SampleIdentifier>().FirstOrDefault(i => i.Name == "AS02");
+        //var as02New = testData.Results.FirstOrDefault(p => p.Name == "AS02").Origin;
+
+        var normalizedVOld = GetNormalizedOriginVector("AS01", "AS02");
+        var normalizedVNew = GetNormalizedMarkerVector(testData, "AS01", "AS02");
+        var degrees = Vector2.SignedAngle(normalizedVOld, normalizedVNew);
+        var dataPairs = new List<ListeningTestDataPair>(); 
+        foreach (var dataPoint in testData.Results)
+        {
+            var originToMove = GameObject.CreatePrimitive(PrimitiveType.Sphere).transform;
+            var markerToMove = new GameObject().transform;
+
+            originToMove.position = dataPoint.Origin - centerNew;
+            markerToMove.position = dataPoint.Marker - centerNew;
+            originToMove.RotateAround(centerOld, Vector3.up, degrees);
+            markerToMove.RotateAround(centerOld, Vector3.up, degrees);
+            originToMove.position = originToMove.position + centerOld;
+            markerToMove.position = markerToMove.position + centerOld;
+            dataPairs.Add(new ListeningTestDataPair(dataPoint.Name, dataPoint.TimeNeeded, originToMove.position, markerToMove.position));
+            Destroy(originToMove.gameObject);
+            Destroy(markerToMove.gameObject);
+        }
+
+        var spssPlotting = new List<SPSSPlottingDataSet>();
+        foreach (var dataPair in dataPairs)
+        {
+            spssPlotting.Add(new SPSSPlottingDataSet()
+            {
+                SampleID = dataPair.Name,
+                Spatializer = spatializer,
+                UserIdentifier = testData.UserIdentifier,
+                X_Marker = dataPair.Marker.x,
+                Y_Marker = dataPair.Marker.z,
+                X_Origin = dataPair.Origin.x,
+                Y_Origin = dataPair.Origin.z,
+            });
+        }
+        return spssPlotting;
     }
 
     private Vector2 GetCenterPointFromTestData(ListeningTestData testData)
