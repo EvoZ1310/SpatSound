@@ -33,7 +33,22 @@ public class SPSSPlottingDataSet
     public float Y_Origin;
     public float X_Marker;
     public float Y_Marker;
+    public float DistanceDiff;
+    public float AzimuthDiff;
+    public float TimeNeeded;
     public string Spatializer;
+}
+
+public class SPSSPlottingMeanDataSet
+{
+    public string SampleID;
+    public float X;
+    public float Y;
+    public float DistanceDiff;
+    public float AzimuthDiff;
+    public float TimeNeeded;
+    public string Spatializer;
+    public int IsOrigin;
 }
 
 public class QuestionaireDataSet
@@ -126,6 +141,14 @@ public class TestDeserialization : MonoBehaviour
         {
             var csvText = CSV.Serialize(spssPlottingDataSet, new CSVSettings { FieldDelimiter = ';' });
             spssPlottingDataFile.Write(csvText);
+        }
+
+        var spssPlottingDataMean = GenerateSPSSPlottingDataMean(spssPlottingDataSet);
+
+        using (var spssPlottingDataMeanFile = new StreamWriter(Path.Combine(OutputPath, "spssPlottingDataMeanFile.csv")))
+        {
+            var csvText = CSV.Serialize(spssPlottingDataMean, new CSVSettings { FieldDelimiter = ';' });
+            spssPlottingDataMeanFile.Write(csvText);
         }
     }
 
@@ -232,7 +255,8 @@ public class TestDeserialization : MonoBehaviour
         var normalizedVOld = GetNormalizedOriginVector("AS01", "AS02");
         var normalizedVNew = GetNormalizedMarkerVector(testData, "AS01", "AS02");
         var degrees = Vector2.SignedAngle(normalizedVOld, normalizedVNew);
-        var dataPairs = new List<ListeningTestDataPair>(); 
+        var spssPlotting = new List<SPSSPlottingDataSet>();
+
         foreach (var dataPoint in testData.Results)
         {
             var originToMove = GameObject.CreatePrimitive(PrimitiveType.Sphere).transform;
@@ -244,26 +268,75 @@ public class TestDeserialization : MonoBehaviour
             markerToMove.RotateAround(centerOld, Vector3.up, degrees);
             originToMove.position = originToMove.position + centerOld;
             markerToMove.position = markerToMove.position + centerOld;
-            dataPairs.Add(new ListeningTestDataPair(dataPoint.Name, dataPoint.TimeNeeded, originToMove.position, markerToMove.position));
+
+            var distance = markerToMove.position.magnitude - originToMove.position.magnitude; // to get negative result if the marker distance was too short
+            var angle = Vector3.Angle(markerToMove.position, originToMove.position);
+
+            spssPlotting.Add(new SPSSPlottingDataSet()
+            {
+                SampleID = dataPoint.Name,
+                Spatializer = spatializer,
+                UserIdentifier = testData.UserIdentifier,
+                TimeNeeded = dataPoint.TimeNeeded,
+                X_Marker = markerToMove.position.x,
+                Y_Marker = markerToMove.position.z,
+                X_Origin = originToMove.position.x,
+                Y_Origin = originToMove.position.z,
+                AzimuthDiff = angle,
+                DistanceDiff = distance
+            });
+
             Destroy(originToMove.gameObject);
             Destroy(markerToMove.gameObject);
         }
 
-        var spssPlotting = new List<SPSSPlottingDataSet>();
-        foreach (var dataPair in dataPairs)
-        {
-            spssPlotting.Add(new SPSSPlottingDataSet()
-            {
-                SampleID = dataPair.Name,
-                Spatializer = spatializer,
-                UserIdentifier = testData.UserIdentifier,
-                X_Marker = dataPair.Marker.x,
-                Y_Marker = dataPair.Marker.z,
-                X_Origin = dataPair.Origin.x,
-                Y_Origin = dataPair.Origin.z,
-            });
-        }
         return spssPlotting;
+    }
+
+    private List<SPSSPlottingMeanDataSet> GenerateSPSSPlottingDataMean(List<SPSSPlottingDataSet> full)
+    {
+        var meanList = new List<SPSSPlottingMeanDataSet>();
+
+        var spatializers = full.GroupBy(e => e.Spatializer);
+        foreach (var spat in spatializers)
+        {
+            var sampleIDs = spat.GroupBy(e => e.SampleID);
+            foreach (var sample in sampleIDs)
+            {
+                var azimuthMean = sample.Sum(e => e.AzimuthDiff) / sample.Count();
+                var distanceMean = sample.Sum(e => e.DistanceDiff) / sample.Count();
+                var timeNeededMean = sample.Sum(e => e.TimeNeeded) / sample.Count();
+                var xMarkerMean = sample.Sum(e => e.X_Marker) / sample.Count();
+                var yMarkerMean = sample.Sum(e => e.Y_Marker) / sample.Count();
+                var xOriginMean = sample.Sum(e => e.X_Origin) / sample.Count();
+                var yOriginMean = sample.Sum(e => e.Y_Origin) / sample.Count();
+
+                meanList.Add(new SPSSPlottingMeanDataSet()
+                {
+                    Spatializer = spat.Key,
+                    SampleID = sample.Key,
+                    TimeNeeded = timeNeededMean,
+                    X = xMarkerMean,
+                    Y = yMarkerMean,
+                    AzimuthDiff = azimuthMean,
+                    DistanceDiff = distanceMean,
+                    IsOrigin = 0
+                });
+                meanList.Add(new SPSSPlottingMeanDataSet()
+                {
+                    Spatializer = spat.Key,
+                    SampleID = sample.Key,
+                    TimeNeeded = timeNeededMean,
+                    X = xOriginMean,
+                    Y = yOriginMean,
+                    AzimuthDiff = azimuthMean,
+                    DistanceDiff = distanceMean,
+                    IsOrigin = 1
+                });
+            }
+        }
+
+        return meanList;
     }
 
     private Vector2 GetCenterPointFromTestData(ListeningTestData testData)
