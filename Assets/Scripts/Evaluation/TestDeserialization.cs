@@ -270,7 +270,7 @@ public class TestDeserialization : MonoBehaviour
             markerToMove.position = markerToMove.position + centerOld;
 
             var distance = markerToMove.position.magnitude - originToMove.position.magnitude; // to get negative result if the marker distance was too short
-            var angle = Vector3.Angle(markerToMove.position, originToMove.position);
+            var angle = Vector3.SignedAngle(markerToMove.position, originToMove.position, Vector3.up); // its left when its negative
 
             spssPlotting.Add(new SPSSPlottingDataSet()
             {
@@ -379,7 +379,7 @@ public class TestDeserialization : MonoBehaviour
 
         var settings = new CSVSettings()
         {
-            FieldDelimiter = ',',
+            FieldDelimiter = ';',
             TextQualifier = '\"',
             ForceQualifiers = true,
             LineSeparator = "\n"

@@ -1088,13 +1088,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OriginPoints: {fileID: 1634129608984250587}
-  DearVRFolder: "Y:\\OneDrive FH Master\\OneDrive - Fachhochschule St. P\xF6lten\\MA\\H\xF6rtest\\dearVRLT"
-  SteamFolder: "Y:\\OneDrive FH Master\\OneDrive - Fachhochschule St. P\xF6lten\\MA\\H\xF6rtest\\SteamAudioLT"
-  MSAcousticFolder: "Y:\\OneDrive FH Master\\OneDrive - Fachhochschule St. P\xF6lten\\MA\\H\xF6rtest\\msacoustic"
-  MetaFolder: "Y:\\OneDrive FH Master\\OneDrive - Fachhochschule St. P\xF6lten\\MA\\H\xF6rtest\\MetaLT"
-  QuestionnairPath: "Y:\\OneDrive FH Master\\OneDrive - Fachhochschule St. P\xF6lten\\MA\\H\xF6rtest\\Spatializing
-    Sound.csv"
-  OutputPath: "Y:\\OneDrive FH Master\\OneDrive - Fachhochschule St. P\xF6lten\\MA\\H\xF6rtest"
+  DearVRFolder: Y:\hortest\4_dearVRLT
+  SteamFolder: Y:\hortest\3_SteamAudioLT
+  MSAcousticFolder: Y:\hortest\1_MSAcoustic
+  MetaFolder: Y:\hortest\2_MetaLT
+  QuestionnairPath: Y:\hortest\QuestionnaireData.csv
+  OutputPath: Y:\hortest\output
 --- !u!4 &397863107
 Transform:
   m_ObjectHideFlags: 0
