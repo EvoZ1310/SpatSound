@@ -137,11 +137,11 @@ public class TestDeserialization : MonoBehaviour
             spssDataFile.Write(csvText);
         }
 
-        using (var spssPlottingDataFile = new StreamWriter(Path.Combine(OutputPath, "spssPlottingDataFile.csv")))
-        {
-            var csvText = CSV.Serialize(spssPlottingDataSet, new CSVSettings { FieldDelimiter = ';' });
-            spssPlottingDataFile.Write(csvText);
-        }
+        //using (var spssPlottingDataFile = new StreamWriter(Path.Combine(OutputPath, "spssPlottingDataFile.csv")))
+        //{
+        //    var csvText = CSV.Serialize(spssPlottingDataSet, new CSVSettings { FieldDelimiter = ';' });
+        //    spssPlottingDataFile.Write(csvText);
+        //}
 
         var spssPlottingDataMean = GenerateSPSSPlottingDataMean(spssPlottingDataSet);
 
@@ -349,24 +349,15 @@ public class TestDeserialization : MonoBehaviour
 
         // set AS01 as new center
         centerNew.position = centerOld - as01Old.transform.position;
-        //NewCenter1.position = centerNew.position;
-        //OldA01.position = OldA01.position - as01Old.transform.position;
-        //OldA02.position = OldA02.position - as01Old.transform.position;
 
         // rotate
         var normalizedVOld = GetNormalizedOriginVector("AS01", "AS02");
         var normalizedVNew = GetNormalizedMarkerVector(testData, "AS01", "AS02");
         var degrees = Vector2.SignedAngle(normalizedVNew, normalizedVOld);
         centerNew.RotateAround(centerOld, Vector3.up, degrees);
-        //NewCenter1.RotateAround(centerOld, Vector3.up, degrees);
-        //OldA01.RotateAround(centerOld, Vector3.up, degrees);
-        //OldA02.RotateAround(centerOld, Vector3.up, degrees);
 
         // add new AS01 position
         centerNew.position = centerNew.position + as01New;
-        //NewCenter.position = centerNew.position;
-        //Debug.Log("New distance: " + (NewCenter.position - NewA01.position).magnitude);
-        //Debug.Log("Old distance: " + (centerOld - as01Old.transform.position).magnitude);
 
         var center = new Vector2(centerNew.position.x, centerNew.position.z);
         Destroy(centerNew.gameObject);
@@ -479,26 +470,4 @@ public class TestDeserialization : MonoBehaviour
 
         return new Vector2(normalizedVector.x, normalizedVector.z);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //var normalizedVOld = OriginPoints.GetChild(2).position - OriginPoints.GetChild(1).position;
-        //var normalizedVNew = NewPoints.GetChild(2).position - NewPoints.GetChild(1).position;
-
-        //var centerOld = Vector3.zero;
-        //TestCube.position = centerOld - OriginPoints.GetChild(1).position;
-
-        //var degrees = Vector3.SignedAngle(normalizedVOld.normalized, normalizedVNew.normalized, Vector3.up);
-        //TestCube.eulerAngles = Vector3.zero;
-        //TestCube.RotateAround(centerOld, Vector3.up, degrees);
-
-        //TestCube.position = TestCube.position + NewPoints.GetChild(1).position;
-        //Debug.DrawLine(OriginPoints.GetChild(1).position, OriginPoints.GetChild(0).position, Color.red);
-        //Debug.DrawLine(NewA01.position, NewA02.position, Color.blue);
-        //Debug.DrawLine(NewCenter1.position, NewCenter.position, Color.green);
-        //Debug.DrawLine(Vector3.zero, OriginPoints.GetChild(0).position, Color.red);
-        //Debug.DrawLine(NewA01.position, NewCenter.position, Color.blue);
-    }
-
 }
